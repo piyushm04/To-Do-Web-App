@@ -1,23 +1,20 @@
-# To-Do List Web App
+# Smart Goal Planner
 
-## Description
-A simple and interactive To-Do List web application built using HTML, CSS, and JavaScript. It allows users to manage daily tasks efficiently.
+An intelligent goal-based planner that generates tasks, diet plans, and routines using a dataset and fuzzy matching.
 
 ## Features
-- Add new tasks
-- Mark tasks as completed
-- Delete tasks
-- Data persistence using localStorage
+- 100+ goals dataset
+- Handles spelling mistakes
+- Smart matching (Levenshtein distance)
+- Clean UI
 
-## Technologies Used
-- HTML
-- CSS
-- JavaScript
+## How to Run
+1. Open project in VS Code
+2. Install Live Server
+3. Right click index.html → Open with Live Server
 
-## How it Works
-Tasks are stored in browser localStorage, so they remain even after refreshing the page. Each task has a completion status which can be toggled.
-
-## Future Improvements
-- Add edit functionality
-- Add filters (completed/pending)
-- Improve UI design
+## Example Inputs
+- lose weight
+- los weight
+- studdy
+- codng
