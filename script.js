@@ -1,21 +1,19 @@
 let dataset = [];
 
-// Load dataset properly
+// ✅ Load dataset (GitHub Pages safe)
 async function loadDataset() {
   try {
-    let res = await fetch("./dataset.json");
+    const res = await fetch("./dataset.json");
     dataset = await res.json();
     console.log("Dataset loaded:", dataset);
   } catch (err) {
-    console.error("Dataset error:", err);
+    console.error("Error loading dataset:", err);
   }
 }
 
-// Call and wait
 loadDataset();
 
-
-// 🔥 SIMPLE MATCH (NO COMPLEX FUZZY FOR NOW)
+// ✅ Simple + reliable matching
 function findBestMatch(input) {
   input = input.toLowerCase();
 
@@ -30,26 +28,25 @@ function findBestMatch(input) {
   return null;
 }
 
-
-// Generate Plan
+// ✅ Main function
 function generatePlan() {
-  let goal = document.getElementById("goalInput").value;
-  let output = document.getElementById("output");
+  const goal = document.getElementById("goalInput").value;
+  const output = document.getElementById("output");
 
   if (!goal) {
-    output.innerHTML = "Enter a goal";
+    output.innerHTML = "<div class='card'>Enter a goal</div>";
     return;
   }
 
-  if (dataset.length === 0) {
-    output.innerHTML = "Dataset not loaded yet";
+  if (!dataset || dataset.length === 0) {
+    output.innerHTML = "<div class='card'>Dataset not loaded. Refresh page.</div>";
     return;
   }
 
-  let plan = findBestMatch(goal);
+  const plan = findBestMatch(goal);
 
   if (!plan) {
-    output.innerHTML = `<div class="card">No match found</div>`;
+    output.innerHTML = "<div class='card'>No matching plan found</div>";
     return;
   }
 
