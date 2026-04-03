@@ -1,19 +1,43 @@
-let dataset = [];
-
-// ✅ Load dataset (GitHub Pages safe)
-async function loadDataset() {
-  try {
-    const res = await fetch("./dataset.json");
-    dataset = await res.json();
-    console.log("Dataset loaded:", dataset);
-  } catch (err) {
-    console.error("Error loading dataset:", err);
+// ✅ Embedded dataset (no fetch issues)
+let dataset = [
+  {
+    goal: "lose weight",
+    keywords: ["lose weight","fat loss","reduce weight","loose weight","los weight"],
+    tasks: ["30 min cardio","10k steps","avoid sugar"],
+    diet: ["low carbs","salads","fruits"],
+    routine: ["morning workout","sleep 8 hrs"]
+  },
+  {
+    goal: "gain weight",
+    keywords: ["gain weight","bulk","increase weight","gian weight"],
+    tasks: ["strength training","eat frequently"],
+    diet: ["high protein","milk","eggs"],
+    routine: ["gym","sleep well"]
+  },
+  {
+    goal: "study",
+    keywords: ["study","studdy","exam prep"],
+    tasks: ["2 hr study","revise notes"],
+    diet: ["light meals","water"],
+    routine: ["morning study","pomodoro"]
+  },
+  {
+    goal: "learn coding",
+    keywords: ["coding","codng","programming"],
+    tasks: ["solve dsa","build projects"],
+    diet: ["hydrate"],
+    routine: ["daily coding"]
+  },
+  {
+    goal: "fitness",
+    keywords: ["fitness","fit","fitnes"],
+    tasks: ["workout","stay active"],
+    diet: ["balanced diet"],
+    routine: ["morning exercise"]
   }
-}
+];
 
-loadDataset();
-
-// ✅ Simple + reliable matching
+// ✅ Matching
 function findBestMatch(input) {
   input = input.toLowerCase();
 
@@ -24,22 +48,16 @@ function findBestMatch(input) {
       }
     }
   }
-
   return null;
 }
 
-// ✅ Main function
+// ✅ Generate Plan
 function generatePlan() {
   const goal = document.getElementById("goalInput").value;
   const output = document.getElementById("output");
 
   if (!goal) {
     output.innerHTML = "<div class='card'>Enter a goal</div>";
-    return;
-  }
-
-  if (!dataset || dataset.length === 0) {
-    output.innerHTML = "<div class='card'>Dataset not loaded. Refresh page.</div>";
     return;
   }
 
