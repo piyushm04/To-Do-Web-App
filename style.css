@@ -1,18 +1,19 @@
 body {
-  font-family: Arial;
   background: #121212;
   color: white;
+  font-family: Arial;
 }
 
 .container {
-  width: 400px;
+  width: 500px;
   margin: auto;
   margin-top: 50px;
 }
 
-input, select, button {
+input, button {
+  padding: 10px;
   margin: 5px;
-  padding: 8px;
+  width: 100%;
 }
 
 button {
@@ -22,15 +23,13 @@ button {
   cursor: pointer;
 }
 
-li {
+.card {
   background: #1f1f1f;
-  padding: 10px;
-  margin: 5px 0;
-  display: flex;
-  justify-content: space-between;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
 }
 
-.done {
-  text-decoration: line-through;
-  color: gray;
+ul {
+  padding-left: 20px;
 }
