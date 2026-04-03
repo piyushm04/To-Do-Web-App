@@ -1,44 +1,19 @@
-// 🔥 DATASET (embedded - no fetch issues)
+// 🔥 DATASET
 let dataset = [
   {
     goal: "lose weight",
     keywords: ["lose weight","fat loss","reduce weight","loose weight","los weight"],
-    tasks: ["30 min cardio","10k steps","avoid sugar"],
-    diet: ["low carbs","salads","fruits"],
-    routine: ["morning workout","sleep 8 hrs"]
-  },
-  {
-    goal: "gain weight",
-    keywords: ["gain weight","bulk","increase weight","gian weight"],
-    tasks: ["strength training","eat frequently"],
-    diet: ["high protein","milk","eggs"],
-    routine: ["gym","sleep well"]
+    tasks: ["30 min cardio","10k steps","avoid sugar"]
   },
   {
     goal: "study",
-    keywords: ["study","studdy","exam prep"],
-    tasks: ["2 hr study","revise notes"],
-    diet: ["light meals","water"],
-    routine: ["morning study","pomodoro"]
-  },
-  {
-    goal: "learn coding",
-    keywords: ["coding","codng","programming"],
-    tasks: ["solve dsa","build projects"],
-    diet: ["hydrate"],
-    routine: ["daily coding"]
-  },
-  {
-    goal: "fitness",
-    keywords: ["fitness","fit","fitnes"],
-    tasks: ["workout","stay active"],
-    diet: ["balanced diet"],
-    routine: ["morning exercise"]
+    keywords: ["study","studdy"],
+    tasks: ["2 hr study","revise notes"]
   }
 ];
 
 
-// 🔥 LOCAL STORAGE TASKS
+// 🔥 STORAGE
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 function saveTasks() {
@@ -46,7 +21,7 @@ function saveTasks() {
 }
 
 
-// 🔥 MATCH FUNCTION
+// 🔥 MATCH
 function findBestMatch(input) {
   input = input.toLowerCase();
 
@@ -61,7 +36,7 @@ function findBestMatch(input) {
 }
 
 
-// 🔥 ADD GENERATED TASKS TO TODO
+// 🔥 ADD TASKS
 function addGeneratedTasks(plan) {
   plan.tasks.forEach(task => {
     tasks.push({
@@ -74,29 +49,11 @@ function addGeneratedTasks(plan) {
 }
 
 
-// 🔥 DELETE TASK
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-}
-
-
-// 🔥 TOGGLE COMPLETE
-function toggleTask(index) {
-  tasks[index].status =
-    tasks[index].status === "Pending" ? "Done" : "Pending";
-
-  saveTasks();
-  renderTasks();
-}
-
-
-// 🔥 RENDER TODO LIST
+// 🔥 RENDER TASKS (FIXED)
 function renderTasks() {
-  let taskHTML = tasks.map((t, i) => `
-    <li style="margin:5px 0;">
-      <span style="${t.status === 'Done' ? 'text-decoration: line-through; color: gray;' : ''}">
+  const listHTML = tasks.map((t, i) => `
+    <li>
+      <span style="${t.status === 'Done' ? 'text-decoration: line-through;' : ''}">
         ${t.text}
       </span>
       <button onclick="toggleTask(${i})">✔</button>
@@ -107,13 +64,31 @@ function renderTasks() {
   return `
     <div class="card">
       <h3>Your To-Do List</h3>
-      <ul>${taskHTML}</ul>
+      <ul>${listHTML}</ul>
     </div>
   `;
 }
 
 
-// 🔥 MAIN FUNCTION
+// 🔥 DELETE
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveTasks();
+  generatePlan(); // 🔥 FIX: re-render properly
+}
+
+
+// 🔥 TOGGLE
+function toggleTask(index) {
+  tasks[index].status =
+    tasks[index].status === "Pending" ? "Done" : "Pending";
+
+  saveTasks();
+  generatePlan(); // 🔥 FIX
+}
+
+
+// 🔥 MAIN FUNCTION (FIXED)
 function generatePlan() {
   const goal = document.getElementById("goalInput").value;
   const output = document.getElementById("output");
@@ -126,30 +101,22 @@ function generatePlan() {
   const plan = findBestMatch(goal);
 
   if (!plan) {
-    output.innerHTML = "<div class='card'>No matching plan found</div>";
+    output.innerHTML = "<div class='card'>No match found</div>";
     return;
   }
 
-  // ✅ Add tasks to To-Do list
+  // 🔥 ADD TASKS FIRST
   addGeneratedTasks(plan);
 
-  // ✅ Display everything
+  // 🔥 THEN SHOW EVERYTHING
   output.innerHTML = `
-    <div class="card"><h3>Goal: ${plan.goal}</h3></div>
+    <div class="card">
+      <h3>Goal: ${plan.goal}</h3>
+    </div>
 
     <div class="card">
-      <h3>Tasks</h3>
+      <h3>Generated Tasks</h3>
       <ul>${plan.tasks.map(t => `<li>${t}</li>`).join("")}</ul>
-    </div>
-
-    <div class="card">
-      <h3>Diet</h3>
-      <ul>${plan.diet.map(d => `<li>${d}</li>`).join("")}</ul>
-    </div>
-
-    <div class="card">
-      <h3>Routine</h3>
-      <ul>${plan.routine.map(r => `<li>${r}</li>`).join("")}</ul>
     </div>
 
     ${renderTasks()}
@@ -157,7 +124,7 @@ function generatePlan() {
 }
 
 
-// 🔥 LOAD EXISTING TASKS ON PAGE LOAD
+// 🔥 LOAD EXISTING TASKS
 window.onload = function () {
   const output = document.getElementById("output");
 
