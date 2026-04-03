@@ -4,68 +4,62 @@ function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function addTask() {
-  let text = document.getElementById("taskInput").value;
-  let priority = document.getElementById("priority").value;
-  let deadline = document.getElementById("deadline").value;
+// 🔥 MAIN FEATURE: Goal-based generator
+function generateFromGoal() {
+  let goal = document.getElementById("goalInput").value.toLowerCase();
 
-  if (text === "") return;
+  if (goal === "") return;
 
-  tasks.push({
-    text,
-    priority,
-    deadline,
-    status: "Pending"
+  let generatedTasks = [];
+
+  // Weight loss
+  if (goal.includes("lose weight")) {
+    generatedTasks = [
+      { text: "30 min cardio", priority: "High" },
+      { text: "Drink 3L water", priority: "Medium" },
+      { text: "Avoid sugar", priority: "High" },
+      { text: "Eat salad", priority: "Medium" },
+      { text: "Sleep 8 hours", priority: "Low" }
+    ];
+  }
+
+  // Weight gain
+  else if (goal.includes("gain weight")) {
+    generatedTasks = [
+      { text: "Eat high protein diet", priority: "High" },
+      { text: "Strength training", priority: "High" },
+      { text: "Drink milk daily", priority: "Medium" },
+      { text: "Eat 5 meals/day", priority: "High" }
+    ];
+  }
+
+  // Study goal
+  else if (goal.includes("study")) {
+    generatedTasks = [
+      { text: "2 hrs focused study", priority: "High" },
+      { text: "Revise notes", priority: "Medium" },
+      { text: "Practice problems", priority: "High" }
+    ];
+  }
+
+  // Default fallback
+  else {
+    generatedTasks = [
+      { text: "Set clear goal steps", priority: "Medium" },
+      { text: "Track progress", priority: "Low" }
+    ];
+  }
+
+  // Add to main tasks list
+  generatedTasks.forEach(task => {
+    tasks.push({
+      text: task.text,
+      priority: task.priority,
+      deadline: "",
+      status: "Pending"
+    });
   });
 
-  document.getElementById("taskInput").value = "";
   saveTasks();
   renderTasks();
 }
-
-function toggleStatus(index) {
-  tasks[index].status =
-    tasks[index].status === "Pending" ? "Done" : "Pending";
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-}
-
-function renderTasks() {
-  let list = document.getElementById("taskList");
-  list.innerHTML = "";
-
-  let search = document.getElementById("search").value.toLowerCase();
-  let filter = document.getElementById("filter").value;
-
-  tasks.forEach((task, index) => {
-    if (
-      task.text.toLowerCase().includes(search) &&
-      (filter === "All" || task.status === filter)
-    ) {
-      let li = document.createElement("li");
-
-      li.className = task.status === "Done" ? "done" : "";
-
-      li.innerHTML = `
-        <div>
-          <strong>${task.text}</strong><br>
-          ${task.priority} | ${task.deadline}
-        </div>
-        <div>
-          <button onclick="toggleStatus(${index})">✔</button>
-          <button onclick="deleteTask(${index})">❌</button>
-        </div>
-      `;
-
-      list.appendChild(li);
-    }
-  });
-}
-
-renderTasks();
